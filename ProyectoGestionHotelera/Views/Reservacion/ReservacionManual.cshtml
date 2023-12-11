@@ -1,0 +1,358 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Reservación Manual";
+}
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<style>
+    .error-message {
+        color: red;
+        font-size: 0.9em;
+        margin-top: 0.25rem;
+    }
+
+    .custom-spinner {
+        color: #28a745; /* Color verde */
+    }
+
+    #mensaje {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: none;
+        text-align: center;
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+
+
+<div class="container">
+    <h1 class="mt-4 mb-4 text-center">Registrar Reservación Manual</h1>
+
+    <form method="post" action="/Reservacion/ReservaManual" class="m-3 p-3 border border-primary needs-validation" novalidate>
+
+        <div class="form-group">
+            <label for="nombreHotel">Seleccione un hotel:</label>
+            <select id="nombreHotel" name="nombreHotel" class="form-control" required>
+                <option value="Hotel Continental de New York">Hotel Continental de New York</option>
+                <option value="Hotel Continental de Roma">Hotel Continental de Roma</option>
+                <option value="Hotel Continental de Marruecos">Hotel Continental de Marruecos</option>
+                <option value="Hotel Continental de Osaka Tokyo">Hotel Continental de Osaka Tokyo</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="Nombre" class="form-control" required>
+            <div class="invalid-feedback">
+                Por favor, complete este campo.
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="primerApellido">Primer Apellido:</label>
+            <input type="text" id="primerApellido" name="PrimerApellido" class="form-control" required>
+            <div class="invalid-feedback">
+                Por favor, complete este campo.
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="segundoApellido">Segundo Apellido:</label>
+            <input type="text" id="segundoApellido" name="SegundoApellido" class="form-control" required>
+            <div class="invalid-feedback">
+                Por favor, complete este campo.
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="nacionalidad">Nacionalidad:</label>
+            <select id="nacionalidad" name="Nacionalidad" class="form-control" required>
+                <!-- Opciones de nacionalidad se cargarán dinámicamente mediante JavaScript -->
+            </select>
+            <div class="invalid-feedback">
+                Por favor, seleccione una nacionalidad.
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="cedulaIdentidad">Número de Cédula o DIMEX:</label>
+            <input type="text" id="cedulaIdentidad" name="CedulaIdentidad" onchange="validarCedula(this)" class="form-control" required>
+            <div class="invalid-feedback">
+                Por favor, proporcione un número de cédula o DIMEX válido.
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="telefono">Número de Teléfono:</label>
+            <div class="input-group">
+                <select id="codigoPais" name="CodigoPais" class="form-control input-group-prepend" required>
+                    <option value="+1">+1 (Estados Unidos)</option>
+                    <option value("+1-684">+1-684 (Samoa Americana)</option>
+                    <option value="+1-671">+1-671 (Guam)</option>
+                    <option value="+1-876">+1-876 (Jamaica)</option>
+                    <option value="+1-868">+1-868 (Trinidad y Tobago)</option>
+                    <option value="+1-649">+1-649 (Islas Turcas y Caicos)</option>
+                    <option value="+1-340">+1-340 (Islas Vírgenes de EE. UU.)</option>
+                    <option value="+44">+44 (Reino Unido)</option>
+                    <option value="+49">+49 (Alemania)</option>
+                    <option value="+33">+33 (Francia)</option>
+                    <option value="+34">+34 (España)</option>
+                    <option value="+39">+39 (Italia)</option>
+                    <option value="+81">+81 (Japón)</option>
+                    <option value="+86">+86 (China)</option>
+                    <option value="+91">+91 (India)</option>
+                    <option value="+52">+52 (México)</option>
+                    <option value="+93">+93 (Afganistán)</option>
+                    <option value="+355">+355 (Albania)</option>
+                    <option value="+213">+213 (Argelia)</option>
+                    <option value="+376">+376 (Andorra)</option>
+                    <option value="+244">+244 (Angola)</option>
+                    <option value="+54">+54 (Argentina)</option>
+                    <option value="+374">+374 (Armenia)</option>
+                    <option value="+297">+297 (Aruba)</option>
+                    <option value="+61">+61 (Australia)</option>
+                    <option value="+43">+43 (Austria)</option>
+                    <option value="+994">+994 (Azerbaiyán)</option>
+                    <option value="+973">+973 (Baréin)</option>
+                    <option value="+880">+880 (Bangladesh)</option>
+                    <option value="+375">+375 (Bielorrusia)</option>
+                    <option value="+32">+32 (Bélgica)</option>
+                    <option value="+501">+501 (Belice)</option>
+                    <option value="+229">+229 (Benín)</option>
+                    <option value="+975">+975 (Bután)</option>
+                    <option value="+591">+591 (Bolivia)</option>
+                    <option value="+387">+387 (Bosnia y Herzegovina)</option>
+                    <option value="+267">+267 (Botsuana)</option>
+                    <option value="+55">+55 (Brasil)</option>
+                    <option value="+673">+673 (Brunéi)</option>
+                    <option value="+359">+359 (Bulgaria)</option>
+                    <option value="+226">+226 (Burkina Faso)</option>
+                    <option value="+257">+257 (Burundi)</option>
+                    <option value="+855">+855 (Camboya)</option>
+                    <option value="+237">+237 (Camerún)</option>
+                    <option value="+238">+238 (Cabo Verde)</option>
+                    <option value="+236">+236 (República Centroafricana)</option>
+                    <option value="+235">+235 (Chad)</option>
+                    <option value="+56">+56 (Chile)</option>
+                    <option value="+57">+57 (Colombia)</option>
+                    <option value="+269">+269 (Comoras)</option>
+                    <option value="+506">+506 (Costa Rica)</option>
+                </select>
+                <input type="tel" id="telefono" name="telefono" class="form-control" placeholder="Ingrese el número de teléfono" required>
+            </div>
+            <div class="invalid-feedback">
+                Por favor, complete este campo.
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="correoElectronico">Correo Electrónico:</label>
+            <input type="email" id="correoElectronico" name="CorreoElectronico" class="form-control" required>
+            <div class="invalid-feedback">
+                Proporcione un correo electrónico válido.
+            </div>
+            <small class="form-text text-muted">
+                El correo electrónico debe tener un formato válido (por ejemplo, usuario@dominio.com).
+            </small>
+        </div>
+
+
+        <div class="form-group">
+            <label for="torre">Torre:</label>
+            <select id="torre" name="Torre" class="form-control" required>
+                <option value="1">Torre 1</option>
+                <option value="2">Torre 2</option>
+            </select>
+            <div class="invalid-feedback">
+                Proporcione un número de torre válido.
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="piso">Piso:</label>
+            <select id="piso" name="Piso" class="form-control" required>
+                <option value="1">Piso 1</option>
+                <option value="2">Piso 2</option>
+                <option value="3">Piso 3</option>
+                <option value="4">Piso 4</option>
+                <option value="5">Piso 5</option>
+            </select>
+            <div class="invalid-feedback">
+                Proporcione un número de piso válido.
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="numeroHabitacion">Número de Habitación:</label>
+            <select id="numeroHabitacion" name="NumeroHabitacion" class="form-control" required>
+                <option value="1">Habitación 1</option>
+                <option value="2">Habitación 2</option>
+                <option value="3">Habitación 3</option>
+                <option value="4">Habitación 4</option>
+                <option value="5">Habitación 5</option>
+                <option value="6">Habitación 6</option>
+                <option value="7">Habitación 7</option>
+                <option value="8">Habitación 8</option>
+                <option value="9">Habitación 9</option>
+                <option value="10">Habitación 10</option>
+            </select>
+            <div class="invalid-feedback">
+                Proporcione un número de habitación válido.
+            </div>
+        </div>
+        <br />
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Guardar Reservación</button>
+        </div>
+        <br />
+    </form>
+
+</div>
+
+<div class="modal" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmationModalLabel">Confirmación</h5>
+            </div>
+            <div class="modal-body">
+                ¿Desea registrar la reservación?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="cancelarButton" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="guardarButton">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    (function () {
+        'use strict';
+
+        var forms = document.querySelectorAll('.needs-validation');
+
+        Array.prototype.slice.call(forms).forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                } else {
+                    // Mostrar el modal de confirmación
+                    document.getElementById('confirmationModal').classList.add('show');
+                    document.getElementById('confirmationModal').style.display = 'block';
+
+                    // Prevenir el envío automático del formulario
+                    event.preventDefault();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+
+        // Agregar un listener para cerrar el modal manualmente
+        document.getElementById('cancelarButton').addEventListener('click', function () {
+            document.getElementById('confirmationModal').classList.remove('show');
+            document.getElementById('confirmationModal').style.display = 'none';
+        });
+
+        document.getElementById('guardarButton').addEventListener('click', function () {
+            document.querySelector('.needs-validation').submit();
+            document.getElementById('confirmationModal').classList.remove('show');
+            document.getElementById('confirmationModal').style.display = 'none';
+        });
+    })();
+
+    function validarCedula(input) {
+        var cedula = input.value.trim();
+        var cedulaNacionalRegex = /^[1-9]-\d{4}-\d{4}$/;
+        var dimexRegex = /^DIMEX-\d{4}-\d{4}$/;
+        var errorMessageClass = 'error-message';
+
+        // Elimina el mensaje de error anterior si existe
+        var existingError = input.parentNode.querySelector(`.${errorMessageClass}`);
+        if (existingError) {
+            existingError.remove();
+        }
+
+        // Verificar si es un formato válido de cédula o DIMEX
+        if (!(cedula.match(cedulaNacionalRegex) || cedula.match(dimexRegex))) {
+            var errorMessage = document.createElement('div');
+            errorMessage.textContent = "El formato de la cédula de identidad o DIMEX es incorrecto. Debe tener el formato 'X-XXXX-XXXX' o 'DIMEX-XXXX-XXXX'. Además, solo del 1-9 en el primer dígito se acepta.";
+            errorMessage.classList.add(errorMessageClass);
+            input.parentNode.appendChild(errorMessage);
+            input.value = '';
+        }
+    }
+
+
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.0/gsap.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var mensaje = document.getElementById('mensaje');
+        mensaje.style.display = 'flex';
+
+        gsap.from(mensaje, { opacity: 0, y: -50, duration: 1, ease: "power4.out" });
+
+        setTimeout(function () {
+            gsap.to(mensaje, {
+                opacity: 0, y: -50, duration: 1, ease: "power4.in", onComplete: function () {
+                    mensaje.style.display = 'none';
+                }
+            });
+        }, 3000);
+    });
+</script>
+
+
+@if (TempData["Mensaje"] != null)
+{
+    <div id="mensaje" class="alert @TempData["Tipo"]" role="alert" style="display:none">
+        <div class="d-flex align-items-center">
+            <div class="message-container">
+                @if (TempData["Tipo"].ToString() == "Ok")
+                {
+                    <div class="spinner-border mr-2 custom-spinner" role="status">  </div>
+                }
+                @if (TempData["Tipo"].ToString() == "error")
+                {
+                    <span class="mr-2" style="color: red;">&#10007;</span>
+                }
+            </div>
+            @TempData["Mensaje"]
+        </div>
+    </div>
+}
+
+
+
+<script>
+    // Utilizar la API de REST Countries para obtener la lista de países
+    fetch('https://restcountries.com/v3.1/all')
+        .then(response => response.json())
+        .then(data => {
+            // Obtener el elemento del select de nacionalidad
+            var selectNacionalidad = document.getElementById('nacionalidad');
+
+            // Iterar sobre la lista de países y agregar opciones al select
+            data.forEach(country => {
+                var option = document.createElement('option');
+                option.value = country.name.common;
+                option.textContent = country.name.common;
+                selectNacionalidad.appendChild(option);
+            });
+        })
+        .catch(error => console.error('Error al obtener la lista de países:', error));
+</script>

@@ -1,0 +1,159 @@
+﻿
+@{
+    ViewData["Title"] = "Iniciar Sesión";
+    Layout = null;
+}
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<style>
+    .error-message {
+        color: red;
+        font-size: 0.9em;
+        margin-top: 0.25rem;
+    }
+
+    .custom-spinner {
+        color: #28a745; /* Color verde */
+    }
+
+    #mensaje {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: none;
+        text-align: center;
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ProyectoGestionHotelera</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/ProyectoGestionHotelera.styles.css" asp-append-version="true" />
+</head>
+<div class="container">
+    <h1 class="mt-4 mb-4 text-center">Iniciar Sesión</h1>
+
+    <form method="post" action="/InicioSesion/ValidarInicioSesion" class="m-3 p-3 border border-primary needs-validation" novalidate>
+        <div class="form-group ">
+            <label class="" for="nombre">Usuario:</label>
+            <input type="text" id="Usuario" name="Usuario" class="form-control" required>
+            <div class="invalid-feedback">
+                Por favor, complete este campo.
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="primerApellido">Contraseña:</label>
+            <input type="text" id="contrasena" name="contrasena" class="form-control" required>
+            <div class="invalid-feedback">
+                Por favor, complete este campo.
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="nombreHotel">Seleccione un rol:</label>
+            <select id="rol" name="rol" class="form-control" required>
+                <option value="0">Administrador</option>
+                <option value="1">Usuario</option>
+            </select>
+        </div>
+        <br />
+        <div class="form-group">
+            <button id="sub" type="submit" class="btn btn-primary">Iniciar Sesión</button>
+        </div>
+        <br />
+    </form>
+
+</div>
+
+<script>
+    (function () {
+        'use strict';
+
+        var forms = document.querySelectorAll('.needs-validation');
+
+        Array.prototype.slice.call(forms).forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                } else {
+                    // Mostrar el modal de confirmación
+                  //  document.getElementById('confirmationModal').classList.add('show');
+                   // document.getElementById('confirmationModal').style.display = 'block';
+
+                    // Prevenir el envío automático del formulario
+                    event.preventDefault();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+
+        // Agregar un listener para cerrar el modal manualmente
+        // document.getElementById('cancelarButton').addEventListener('click', function () {
+        //     document.getElementById('confirmationModal').classList.remove('show');
+        //     document.getElementById('confirmationModal').style.display = 'none';
+        // });
+
+        document.getElementById('sub').addEventListener('click', function () {
+            document.querySelector('.needs-validation').submit();
+        //     document.getElementById('confirmationModal').classList.remove('show');
+        //     document.getElementById('confirmationModal').style.display = 'none';
+         });
+    })();
+
+
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.0/gsap.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var mensaje = document.getElementById('mensaje');
+        mensaje.style.display = 'flex';
+
+        gsap.from(mensaje, { opacity: 0, y: -50, duration: 1, ease: "power4.out" });
+
+        setTimeout(function () {
+            gsap.to(mensaje, {
+                opacity: 0, y: -50, duration: 1, ease: "power4.in", onComplete: function () {
+                    mensaje.style.display = 'none';
+                }
+            });
+        }, 3000);
+    });
+</script>
+
+
+@if (TempData["Mensaje"] != null)
+{
+    <div id="mensaje" class="alert @TempData["Tipo"]" role="alert" style="display:none">
+        <div class="d-flex align-items-center">
+            <div class="message-container">
+                @if (TempData["Tipo"].ToString() == "Ok")
+                {
+                    <div class="spinner-border mr-2 custom-spinner" role="status">  </div>
+                }
+                @if (TempData["Tipo"].ToString() == "error")
+                {
+                    <span class="mr-2" style="color: red;">&#10007;</span>
+                }
+            </div>
+            @TempData["Mensaje"]
+        </div>
+    </div>
+}
+
+
+

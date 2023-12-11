@@ -1,0 +1,44 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@{
+    ViewData["Title"] = "Hoteles";
+}
+
+<h1>Lista de todos los Hoteles</h1>
+
+<div class="container">
+    <div class="row">
+        @foreach (var habitacion in Model)
+        {
+            <div class="col-md-6">
+                <table class="table table-bordered">
+                    <thead class="thead-light">
+                        <tr>
+                            <th colspan="2">@habitacion.Nombre</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Torre:</td>
+                            <td>@habitacion.Torre</td>
+                        </tr>
+                        <tr>
+                            <td>Piso:</td>
+                            <td>@habitacion.Piso</td>
+                        </tr>
+                        <tr>
+                            <td>Habitación:</td>
+                            <td>@habitacion.NumeroHabitacion</td>
+                        </tr>
+                        <tr>
+                            <td>Disponibilidad:</td>
+                            <td>@(habitacion.Disponibilidad ? "Disponible" : "No disponible")</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>

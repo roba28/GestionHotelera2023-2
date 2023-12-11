@@ -1,0 +1,60 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Reservaciones";
+}
+
+<div class="container mt-4">
+    <h1 class="text-center">Tipo de Reservación</h1>
+
+    <div class="row mt-4">
+        <div class="col-md-6 text-center">
+            <a asp-controller="Reservacion" asp-action="ReservacionManual" class="text-decoration-none">
+                <div>
+                    <img src="~/Imagenes/Manual.png" alt="Reservación Manual" style="width:200px; height:200px;">
+                    <p>Reservación Manual</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-6 text-center">
+            <a asp-controller="Reservacion" asp-action="ReservacionAutomatica" class="text-decoration-none">
+                <div>
+                    <img src="~/Imagenes/Automatica.png" alt="Reservación Automática" style="width:200px; height:200px;">
+                    <p>Reservación Automática</p>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-6 text-center">
+            <a asp-controller="ReservaEliminar" asp-action="CargarReservaciones" class="text-decoration-none">
+                <div>
+                    <img src="~/Imagenes/Borrar.png" alt="Eliminar Reservarción" style="width:200px; height:200px;">
+                    <p>Eliminar Reservarción</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-6 text-center">
+            <a asp-controller="Persona" asp-action="CargarReservaciones" class="text-decoration-none">
+                <div>
+                    <img src="~/Imagenes/Persona.png" alt="Buscar Persona" style="width:200px; height:200px;">
+                    <p>Buscar Persona</p>
+                </div>
+            </a>
+        </div>
+
+
+        <div class="col-md-6 text-center">
+            <a asp-controller="Hoteles" asp-action="CargarHabitaciones" class="text-decoration-none">
+                <div>
+                    <img src="~/Imagenes/Habitaciones.jpg" alt="Buscar Habitacion" style="width:200px; height:200px;">
+                    <p>Buscar Habitacion Disponible</p>
+                </div>
+            </a>
+        </div>
+
+
+    </div>
+
+    @* <a href="#" class="btn btn-primary position-fixed top-0 end-0 m-3">Administrar</a> *@
+</div>

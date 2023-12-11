@@ -1,0 +1,303 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Eliminar Reservación";
+}
+
+<style>
+    #mensaje {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: none;
+        text-align: center;
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+
+
+
+<div class="container">
+    <h1 class="mt-4 mb-4 text-center">Eliminar Reservación</h1>
+
+    @if (Model != null && Model.Count > 0)
+    {
+        <table class="table">
+            <h1>Lista de Reservas</h1>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Cédula de Identidad</th>
+                    <th>Nacionalidad</th>
+                    <th>Teléfono</th>
+                    <th>Correo Electrónico</th>
+                    <th>Hotel</th>
+                    <th>Torre</th>
+                    <th>Piso</th>
+                    <th>Número de Habitación</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var reservacion in Model)
+                {
+                    var datosReservacion = reservacion.Split(',');
+                    <tr>
+                        <td>@datosReservacion[0]</td>
+                        <td>@datosReservacion[1]</td>
+                        <td>@datosReservacion[3]</td>
+                        <td>@datosReservacion[4]</td>
+                        <td>@datosReservacion[5]</td>
+                        <td>@datosReservacion[6]</td>
+                        <td>@datosReservacion[7]</td>
+                        <td>@datosReservacion[8]</td>
+                        <td>@datosReservacion[9]</td>
+                        <td>@datosReservacion[10]</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p class="no-reservaciones">No hay reservaciones disponibles.</p>
+    }
+
+    <form method="post" action="/ReservaEliminar/EliminarReservacionPersonaPorHotel" id="formEliminarReservacion" class="m-3 p-3 border border-primary">
+        <div class="form-group">
+            <label for="cedulaIdentidad">Cédula de Identidad:</label>
+            <input type="text" id="cedulaIdentidad" name="CedulaIdentidad" onchange="validarCedula(this)" class="form-control" required>
+            <div class="invalid-feedback">
+                Proporcione una cédula de identidad válida.
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="hotel">Seleccionar Hotel:</label>
+            <select id="hotel" name="Hotel" class="form-control">
+                <option value="Hotel Continental de New York">Hotel Continental de New York</option>
+                <option value="Hotel Continental de Roma">Hotel Continental de Roma</option>
+                <option value="Hotel Continental de Marruecos">Hotel Continental de Marruecos</option>
+                <option value="Hotel Continental de Osaka Tokyo">Hotel Continental de Osaka Tokyo</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-danger">Eliminar Reservación</button>
+        </div>
+    </form>
+
+    <form method="post" action="/ReservaEliminar/EliminarTodasReservaciones" id="formEliminarTodasReservaciones" class="m-3 p-3 border border-primary">
+        <div class="form-group">
+            <label for="hotelEliminar">Eliminar todas las reservaciones en el hotel:</label>
+            <select id="hotelEliminar" name="Hotel" class="form-control">
+                <option value="Hotel Continental de New York">Hotel Continental de New York</option>
+                <option value="Hotel Continental de Roma">Hotel Continental de Roma</option>
+                <option value="Hotel Continental de Marruecos">Hotel Continental de Marruecos</option>
+                <option value="Hotel Continental de Osaka Tokyo">Hotel Continental de Osaka Tokyo</option>
+                <option value="Todos">Todos los Hoteles</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-danger">Eliminar Todas las Reservaciones en el Hotel</button>
+        </div>
+    </form>
+
+    <form method="post" action="/ReservaEliminar/EliminarTodasReservacionesPorPersona" id="formEliminarTodasReservacionesPorPersona" class="m-3 p-3 border border-primary">
+        <div class="form-group">
+            <label for="cedulaIdentidadEliminar">Cédula de Identidad:</label>
+            <input type="text" id="cedulaIdentidadEliminar" name="CedulaIdentidad" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-danger">Eliminar Todas las Reservaciones por Persona</button>
+        </div>
+    </form>
+
+
+    <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmationModalLabel">Confirmación</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p id="confirmationMessage"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" onclick="proceedWithDelete()">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <style>
+        /* Estilos para la tabla */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(odd) {
+            background-color: #ffffff;
+        }
+
+        /* Estilos para el mensaje de "No hay reservaciones disponibles" */
+        .no-reservaciones {
+            font-size: 18px;
+            color: #777;
+        }
+    </style>
+
+    <script>
+        (function () {
+            'use strict';
+
+            var forms = document.querySelectorAll('.needs-validation');
+
+            Array.prototype.slice.call(forms).forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList add('was-validated');
+                }, false);
+            });
+        })();
+
+        function validarCedula(input) {
+            var cedula = input.value.trim();
+            var cedulaRegex = /^[1-9]-\d{4}-\d{4}$/;
+            var errorMessageClass = 'error-message';
+
+            // Elimina el mensaje de error anterior si existe
+            var existingError = input.parentNode.querySelector(`.${errorMessageClass}`);
+            if (existingError) {
+                existingError.remove();
+            }
+
+            if (!cedula.match(cedulaRegex)) {
+                var errorMessage = document.createElement('div');
+                errorMessage.textContent = "El formato de la cédula de identidad es incorrecto. Debe tener el formato 'X-XXXX-XXXX'. Además, solo del 1-9 en el primer dígito se acepta.";
+                errorMessage.classList.add(errorMessageClass);
+                input.parentNode.appendChild(errorMessage);
+                input.value = '';
+            }
+        }
+    </script>
+
+    <script>
+        function confirmDelete(form, message) {
+            // Establece el mensaje de confirmación en el modal
+            document.getElementById('confirmationMessage').innerText = message;
+            console.log("confirmDelete function called");
+
+            // Muestra el modal
+            $('#confirmationModal').modal('show');
+
+            // Establece el formulario para enviar cuando el usuario hace clic en "Aceptar"
+            window.proceedWithDelete = function () {
+                form.submit();
+                $('#confirmationModal').modal('hide');
+            };
+        }
+
+        // Cierra el modal al hacer clic en el botón "Cancelar"
+        // Cierra el modal al hacer clic en el botón "Cancelar"
+        $('#confirmationModal').on('click', '.close, .btn-secondary', function () {
+            $('#confirmationModal').modal('hide');
+        });
+
+
+        document.getElementById("formEliminarReservacion").addEventListener("submit", function (event) {
+            event.preventDefault();
+            confirmDelete(this, "¿Desea eliminar la reservación de esta persona en este hotel?");
+        });
+
+        document.getElementById("formEliminarTodasReservaciones").addEventListener("submit", function (event) {
+            event.preventDefault();
+            confirmDelete(this, "¿Desea eliminar todas las reservaciones en este hotel?");
+        });
+
+        document.getElementById("formEliminarTodasReservacionesPorPersona").addEventListener("submit", function (event) {
+            event.preventDefault();
+            confirmDelete(this, "¿Desea eliminar todas las reservaciones de esta persona?");
+        });
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.0/gsap.min.js"></script>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var mensaje = document.getElementById('mensaje');
+            mensaje.style.display = 'flex';
+
+            gsap.from(mensaje, { opacity: 0, y: -50, duration: 1, ease: "power4.out" });
+
+            setTimeout(function () {
+                gsap.to(mensaje, {
+                    opacity: 0, y: -50, duration: 1, ease: "power4.in", onComplete: function () {
+                        mensaje.style.display = 'none';
+                    }
+                });
+            }, 3000);
+        });
+    </script>
+
+
+
+    @if (TempData["Mensaje"] != null)
+    {
+        <div id="mensaje" class="alert @TempData["Tipo"]" role="alert" style="display:none">
+            <div class="d-flex align-items-center">
+                <div class="message-container">
+                    @if (TempData["Tipo"].ToString() == "Ok")
+                    {
+                        <span class="mr-2" style="color: green;">&#10003;</span> <!-- Check verde -->
+                    }
+                    @if (TempData["Tipo"].ToString() == "error")
+                    {
+                        <span class="mr-2" style="color: red;">&#10007;</span> <!-- X roja -->
+                    }
+                </div>
+                @TempData["Mensaje"]
+            </div>
+        </div>
+    }
+
+
+
+

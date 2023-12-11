@@ -1,0 +1,108 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ProyectoGestionHotelera</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/ProyectoGestionHotelera.styles.css" asp-append-version="true" />
+
+    <!-- Agrega esto en la sección <head> -->
+    <style>
+        /* Estilos para la hora y fecha */
+        #systemTime,
+        #systemDate {
+            font-size: 18px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        /* Estilos para el navbar */
+        .navbar {
+            position: relative;
+        }
+
+        /* Estilos para el contenedor del navbar */
+        .container-fluid {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Añade margen al navbar para evitar superposiciones con la hora y fecha */
+        .navbar-collapse {
+            margin-top: 10px;
+        }
+    </style>
+
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ProyectoGestionHotelera</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Hoteles" asp-action="hotel">Hoteles</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Reservacion" asp-action="Reservacion">Reservacion</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <span id="systemTime"></span>  <span id="systemDate"></span>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2023 - ProyectoGestionHotelera - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+        function updateDateTime() {
+            var dateTime = new Date();
+
+            var hours = dateTime.getHours();
+            var minutes = dateTime.getMinutes();
+            var ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // Handle midnight (12:00 AM)
+
+            var timeString = hours + ':' + (minutes < 10 ? '0' + minutes : minutes) + ' ' + ampm;
+            var dateString = dateTime.toLocaleDateString('en-US');
+
+            document.getElementById('systemTime').innerText = timeString;
+            document.getElementById('systemDate').innerText = dateString;
+        }
+
+        setInterval(updateDateTime, 1000);
+
+        updateDateTime();
+    </script>
+
+</body>
+</html>
